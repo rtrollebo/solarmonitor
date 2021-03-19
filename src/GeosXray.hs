@@ -28,8 +28,8 @@ sourceUrl = "https://services.swpc.noaa.gov/json/goes/primary/xrays-1-day.json"
 data FlareClassification = A | B | C | D | M | X deriving (Show)
 
 -- Converter from flux value to flare classification
-toFlareClassiciation :: Double -> FlareClassification
-toFlareClassiciation flux 
+toFlareClassification :: Double -> FlareClassification
+toFlareClassification flux 
     |                  flux < 1.0E-7 = A 
     | flux > 1.0E-7 && flux < 1.0E-6 = B 
     | flux > 1.0E-6 && flux < 1.0E-5 = C
@@ -80,7 +80,7 @@ isXrayEvent former current flux t
     | current > former && flux < current && isEvent   = Just (XrayEvent current timestamp flareClass)
     | otherwise                                       = Nothing 
         where timestamp = (getUtcTime (convertText t :: String))
-              flareClass = toFlareClassiciation current
+              flareClass = toFlareClassification current
               isEvent = filterFlareClassification flareClass
 
 filterFlareClassification :: FlareClassification -> Bool
